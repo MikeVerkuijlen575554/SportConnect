@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportConnect - {% block title %}{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --navbar-bg-light: #f8f9fa;
+            --navbar-bg-dark: #212529;
+            --text-color-dark: #f8f9fa;
+            --text-color-light: #212529;
+        }
+
+        [data-bs-theme="dark"] {
+            --navbar-bg: var(--navbar-bg-dark);
+            --text-color: var(--text-color-dark);
+        }
+
+        [data-bs-theme="light"] {
+            --navbar-bg: var(--navbar-bg-light);
+            --text-color: var(--text-color-light);
+        }
+
+        .navbar {
+            background-color: var(--navbar-bg) !important;
+        }
+        
+        .navbar-brand {
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-brand img {
+            height: 80px;
+            width: auto;
+            margin-top: -10px;
+            margin-bottom: -10px;
+        }
+
+        .logo-dark {
+            display: none;
+        }
+
+        [data-bs-theme="dark"] .logo-light {
+            display: none;
+        }
+
+        [data-bs-theme="dark"] .logo-dark {
+            display: block;
+        }
+
+        .navbar-brand .logo-text {
+            color: #ffc107;
+            margin-left: 10px;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        [data-bs-theme="dark"] {
+            color-scheme: dark;
+        }
+
+        [data-bs-theme="dark"] .card {
+            --bs-card-bg: #2b3035;
+        }
+
+        [data-bs-theme="dark"] .text-body {
+            color: #ffffff !important;
+        }
+
+        [data-bs-theme="dark"] .text-body-secondary {
+            color: #e9ecef !important;
+        }
+
+        [data-bs-theme="dark"] .modal-content {
+            background-color: #2b3035;
+            color: #ffffff;
+        }
+
+        [data-bs-theme="dark"] .form-control,
+        [data-bs-theme="dark"] .form-select {
+            background-color: #1a1d20;
+            border-color: #373b3e;
+            color: #ffffff;
+        }
+
+        [data-bs-theme="dark"] .form-control:focus,
+        [data-bs-theme="dark"] .form-select:focus {
+            background-color: #1a1d20;
+            border-color: #ffc107;
+            color: #ffffff;
+        }
+
+        [data-bs-theme="dark"] .card-header {
+            border-bottom-color: #ffc107;
+        }
+
+        [data-bs-theme="dark"] h1,
+        [data-bs-theme="dark"] h2,
+        [data-bs-theme="dark"] h3,
+        [data-bs-theme="dark"] h4,
+        [data-bs-theme="dark"] h5,
+        [data-bs-theme="dark"] h6 {
+            color: #ffffff;
+        }
+
+        [data-bs-theme="dark"] .card-header h5 {
+            color: #ffffff !important;
+        }
+
+        [data-bs-theme="dark"] .nav-link {
+            color: #ffffff;
+        }
+
+        [data-bs-theme="dark"] .nav-link:hover {
+            color: #ffc107;
+        }
+
+        [data-bs-theme="dark"] .card-header.bg-white {
+            background-color: #2b3035 !important;
+            border-bottom: 1px solid #ffc107;
+        }
+
+        [data-bs-theme="dark"] .card-header.bg-light {
+            background-color: #343a40 !important;
+        }
+
+        [data-bs-theme="dark"] .form-text {
+            color: #e9ecef !important;
+        }
+
+        [data-bs-theme="dark"] .text-muted {
+            color: #e9ecef !important;
+        }
+
+        [data-bs-theme="dark"] .list-unstyled li {
+            color: #ffffff !important;
+        }
+
+        [data-bs-theme="dark"] .card-body p {
+            color: #ffffff !important;
+        }
+
+        [data-bs-theme="dark"] .card-body strong {
+            color: #ffc107 !important;
+        }
+
+        [data-bs-theme="dark"] .btn-outline-warning {
+            color: #ffc107;
+            border-color: #ffc107;
+        }
+
+        [data-bs-theme="dark"] .btn-outline-warning:hover {
+            background-color: #ffc107;
+            border-color: #ffc107;
+            color: #000;
+        }
+
+        [data-bs-theme="dark"] .btn-outline-danger {
+            color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        [data-bs-theme="dark"] .btn-outline-danger:hover {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            color: #fff;
+        }
+
+        [data-bs-theme="dark"] .btn-outline-success {
+            color: #198754;
+            border-color: #198754;
+        }
+
+        [data-bs-theme="dark"] .btn-outline-success:hover {
+            background-color: #198754;
+            border-color: #198754;
+            color: #fff;
+        }
+
+        [data-bs-theme="dark"] .btn-outline-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: #ffffff;
+        }
+
+        [data-bs-theme="dark"] .btn-outline-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+            color: #ffffff;
+        }
+
+        [data-bs-theme="dark"] p {
+            color: #ffffff !important;
+        }
+
+        .card {
+            transition: transform 0.2s;
+            margin-bottom: 1rem;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .btn-warning {
+            background-color: #ffc107;
+            border-color: #ffc107;
+            color: #000;
+        }
+        .btn-warning:hover {
+            background-color: #ffca28;
+            border-color: #ffc720;
+            color: #000;
+        }
+        .btn-outline-warning {
+            color: #ffc107;
+            border-color: #ffc107;
+        }
+        .btn-outline-warning:hover {
+            background-color: #ffc107;
+            border-color: #ffc107;
+            color: #000;
+        }
+        .flash-messages {
+            margin-top: 1rem;
+        }
+        .badge {
+            font-size: 0.9em;
+            padding: 0.5em 0.8em;
+        }
+        .text-warning {
+            color: #ffc107 !important;
+        }
+        .event-icon {
+            height: 32px;
+            width: 32px;
+            object-fit: contain;
+        }
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('landing') }}">
+                <img src="{{ url_for('static', filename='images/logo-normal.png') }}" alt="SportConnect Logo" class="logo-light">
+                <img src="{{ url_for('static', filename='images/logo-dark.png') }}" alt="SportConnect Logo" class="logo-dark">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    {% if 'user_id' in session %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('index') }}">All Events</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('add_event') }}">Add Event</a>
+                        </li>
+                        {% if session['username'] == 'admin' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin') }}">Admin</a>
+                        </li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <button class="btn nav-link" id="theme-toggle">
+                            <i class="bi bi-sun-fill" id="theme-icon"></i>
+                        </button>
+                    </li>
+                    {% if 'user_id' in session %}
+                        <li class="nav-item">
+                            <span class="nav-link">
+                                <i class="bi bi-person-circle"></i> {{ session['username'] }}
+                            </span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('logout') }}">
+                                <i class="bi bi-box-arrow-right"></i> Logout
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('login') }}">
+                                <i class="bi bi-box-arrow-in-right"></i> Login
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('register') }}">
+                                <i class="bi bi-person-plus"></i> Register
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Theme toggling
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        
+        // Check for saved theme preference, otherwise use system preference
+        const getPreferredTheme = () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                return savedTheme;
+            }
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        };
+        
+        const setTheme = (theme) => {
+            document.documentElement.setAttribute('data-bs-theme', theme);
+            localStorage.setItem('theme', theme);
+            themeIcon.className = theme === 'dark' ? 'bi bi-moon-fill' : 'bi bi-sun-fill';
+        };
+        
+        // Set initial theme
+        setTheme(getPreferredTheme());
+        
+        // Toggle theme
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html> 

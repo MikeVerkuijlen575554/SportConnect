@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1>Admin Dashboard</h1>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Users</h5>
+                <p class="card-text display-4">{{ total_users }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h5 class="card-title">Users with Birth Date</h5>
+                <p class="card-text display-4">{{ users_with_birth_date }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-dark">
+            <div class="card-body">
+                <h5 class="card-title">Total Events</h5>
+                <p class="card-text display-4">{{ total_events }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Subscriptions</h5>
+                <p class="card-text display-4">{{ total_subscriptions }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Sport Type Preferences by Age Category</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="preferencesChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Event Subscriptions by Sport Type</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="sportChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Initialize the preferences chart
+    const preferencesCtx = document.getElementById('preferencesChart').getContext('2d');
+    new Chart(preferencesCtx, {
+        type: 'bar',
+        data: {{ chart_data|tojson|safe }},
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    stacked: true,
+                    title: {
+                        display: true,
+                        text: 'Sport Types'
+                    }
+                },
+                y: {
+                    stacked: true,
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Number of Users'
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'User Preferences by Age Category'
+                }
+            }
+        }
+    });
+
+    // Initialize the sport registration chart
+    const sportCtx = document.getElementById('sportChart').getContext('2d');
+    new Chart(sportCtx, {
+        type: 'line',
+        data: {{ sport_chart_data|tojson|safe }},
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Sport Types'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Number of Subscribed Events'
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Number of Subscribed Events by Sport Type'
+                }
+            }
+        }
+    });
+</script>
+{% endblock %} 

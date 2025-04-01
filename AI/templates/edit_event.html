@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Event{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1>Edit Event</h1>
+        <p class="text-muted">Update event details</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label for="event_type" class="form-label">Event Type</label>
+                        <select class="form-select" id="event_type" name="event_type" required>
+                            <option value="">Select event type</option>
+                            {% for type in event_types %}
+                            <option value="{{ type.id }}" data-icon="{{ type.icon }}"
+                                    {% if type.id == event.subtype.event_type.id %}selected{% endif %}>
+                                {{ type.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="event_subtype" class="form-label">Event Subtype</label>
+                        <select class="form-select" id="event_subtype" name="event_subtype" required>
+                            <option value="">Select subtype</option>
+                            {% for subtype in event.subtype.event_type.subtypes %}
+                            <option value="{{ subtype.id }}" {% if subtype.id == event.eventSubTypeID %}selected{% endif %}>
+                                {{ subtype.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date and Time</label>
+                        <input type="datetime-local" class="form-control" id="date" name="date" 
+                               value="{{ event.date.strftime('%Y-%m-%dT%H:%M') }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Location</label>
+                        <input type="text" class="form-control" id="address" name="address" 
+                               value="{{ event.address }}" required onchange="updateMap(this.value)">
+                        <div style="width: 100%; margin-top: 10px;">
+                            <iframe id="map-frame"
+                                    width="100%" 
+                                    height="300" 
+                                    frameborder="0" 
+                                    scrolling="no" 
+                                    marginheight="0" 
+                                    marginwidth="0" 
+                                    src="https://maps.google.com/maps?width=100%25&amp;height=300&amp;hl=en&amp;q={{ event.address }}&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed">
+                            </iframe>
+                        </div>
+                        <a href="#" class="btn btn-warning btn-sm mt-2" onclick="openInGoogleMaps()">
+                            <i class="bi bi-map"></i> Open in Google Maps
+                        </a>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="availability" class="form-label">Age Category</label>
+                        <select class="form-select" id="availability" name="availability" required>
+                            <option value="">Select age category</option>
+                            {% for category in age_categories %}
+                            <option value="{{ category }}" {% if category == event.availability %}selected{% endif %}>
+                                {{ category }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="max_participants" class="form-label">Maximum Participants</label>
+                        <input type="number" class="form-control" id="max_participants" name="max_participants" 
+                               value="{{ event.max_participants }}" min="1" required>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-warning">
+                            <i class="bi bi-save"></i> Save Changes
+                        </button>
+                        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function updateMap(address) {
+    const mapFrame = document.getElementById('map-frame');
+    const encodedAddress = encodeURIComponent(address);
+    mapFrame.src = `https://maps.google.com/maps?width=100%25&height=300&hl=en&q=${encodedAddress}&t=&z=14&ie=UTF8&iwloc=B&output=embed`;
+}
+
+function openInGoogleMaps() {
+    const address = document.getElementById('address').value;
+    if (address) {
+        const encodedAddress = encodeURIComponent(address);
+        window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank');
+    }
+}
+
+document.getElementById('event_type').addEventListener('change', function() {
+    const subtypeSelect = document.getElementById('event_subtype');
+    const selectedType = this.value;
+    
+    if (selectedType) {
+        fetch(`/get_subtypes/${selectedType}`)
+            .then(response => response.json())
+            .then(data => {
+                subtypeSelect.innerHTML = '<option value="">Select subtype</option>';
+                data.forEach(subtype => {
+                    subtypeSelect.innerHTML += `<option value="${subtype.id}">${subtype.name}</option>`;
+                });
+            });
+    } else {
+        subtypeSelect.innerHTML = '<option value="">Select event type first</option>';
+    }
+});
+
+// Show selected event type icon
+document.getElementById('event_type').addEventListener('change', function() {
+    const selectedOption = this.options[this.selectedIndex];
+    const icon = selectedOption.getAttribute('data-icon');
+    const iconPreview = document.getElementById('icon-preview');
+    
+    if (iconPreview) {
+        if (icon) {
+            iconPreview.src = icon;
+            iconPreview.style.display = 'block';
+        } else {
+            iconPreview.style.display = 'none';
+        }
+    }
+});
+</script>
+{% endblock %} 
